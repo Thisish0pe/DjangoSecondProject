@@ -16,6 +16,8 @@ import os
 # Auth user
 AUTH_USER_MODEL = 'user.User'
 
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -41,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'chatbot',
     'user',
 ]
@@ -81,6 +84,21 @@ WSGI_APPLICATION = 'chat_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
+
+# REST Framework
+# Throttle : 서버의 부하 관리 혹은 무단 사용을 방지 가능
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASS': {
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    },
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '5/hour', # sec, min, hour, day
+        'user': '20/hour',
+    }
+}
+
 
 DATABASES = {
     'default': {

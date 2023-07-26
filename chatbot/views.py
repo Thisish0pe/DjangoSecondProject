@@ -3,6 +3,7 @@ from django.views import View
 from dotenv import load_dotenv
 import openai
 import os
+from .models import Conversation
 
 load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
@@ -11,7 +12,7 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 class ChatView(View):
     def get(self, request, *args, **kwargs):
         conversations = request.session.get('conversations', [])
-        return render(request, 'chat.html', {'conversations': conversations})
+        return render(request, 'chatbot/chat.html', {'conversations': conversations})
 
     def post(self, request, *args, **kwargs):
         prompt = request.POST.get('prompt')
@@ -32,10 +33,12 @@ class ChatView(View):
             )
             response = completions.choices[0].text.strip()
 
-            conversation = {'prompt': prompt, 'response': response}
+            conversation = Conversation(prompt=prompt, response=response)
+            conversation.save()
 
             # 대화 기록에 새로운 응답 추가
-            session_conversations.append(conversation)
+            session_conversations.append({'prompt': prompt, 'response': response})
             request.session['conversations'] = session_conversations
+            request.session.modified = True
 
         return self.get(request, *args, **kwargs)
