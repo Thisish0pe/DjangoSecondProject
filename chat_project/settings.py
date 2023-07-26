@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 import os
 
 # Auth user
@@ -87,7 +88,6 @@ WSGI_APPLICATION = 'chat_project.wsgi.application'
 
 
 # REST Framework
-# Throttle : 서버의 부하 관리 혹은 무단 사용을 방지 가능
 REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_CLASS': {
         'rest_framework.throttling.AnonRateThrottle',

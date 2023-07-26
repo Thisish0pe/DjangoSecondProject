@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from django.views import View
+from django.contrib.auth import get_user_model
 from dotenv import load_dotenv
 import openai
 import os
 from .models import Conversation
+
+User = get_user_model()
 
 load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
