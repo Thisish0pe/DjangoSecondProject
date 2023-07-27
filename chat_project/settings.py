@@ -140,8 +140,8 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 #REST Framework
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework_api_key.permissions.HasAPIKey",
     ],
     'DEFAULT_THROTTLE_CLASS': {
         'rest_framework.throttling.AnonRateThrottle',
