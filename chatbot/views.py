@@ -1,10 +1,13 @@
-from django.shortcuts import render
-from django.views import View
 from django.contrib.auth import get_user_model
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.throttling import UserRateThrottle
 from dotenv import load_dotenv
 import openai
 import os
 from .models import Conversation
+from .serializers import CoversationSerializer
 
 User = get_user_model()
 
@@ -12,15 +15,22 @@ load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
 
-class ChatView(View):
-    def get(self, request, *args, **kwargs):
-        conversations = request.session.get('conversations', [])
-        return render(request, 'chatbot/chat.html', {'conversations': conversations})
+class ChatView(APIView):
+
+    throttle_classes = [UserRateThrottle]
+
+    # def get(self, request, pk, *args, **kwargs):
+    #     # 로그인 후 특정 유저의 챗 봇 대화 가져오기
+    #     conversations = Conversation.objects.get(pk=pk) # user_id
+    #     # JSON 형태로 대화내역 나열 후 전송
+    #     serialized_conversations = CoversationSerializer(conversations, many=True) # 직렬화
+    #     return Response(serialized_conversations.data)
 
     def post(self, request, *args, **kwargs):
-        prompt = request.POST.get('prompt')
+        # 유저의 질문 가져오기
+        prompt = request.data.get('prompt')
         if prompt:
-            # 이전 대화 기록 가져오기
+            # 이전 대화 기록 가져오기 -> get 이 필요가 없음. 채팅화면은 프론트에서 해줄테니깐
             session_conversations = request.session.get('conversations', [])
             previous_conversations = "\n".join([f"User: {c['prompt']}\nAI: {c['response']}" for c in session_conversations])
             prompt_with_previous = f"{previous_conversations}\nUser: {prompt}\nAI:"
@@ -44,4 +54,6 @@ class ChatView(View):
             request.session['conversations'] = session_conversations
             request.session.modified = True
 
-        return self.get(request, *args, **kwargs)
+            return Response(status=status.HTTP_201_CREATED)
+        
+        return Response(status=status.HTTP_400_BAD_REQUEST)
