@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('chatbot/', include('chatbot.urls')),
     path('user/', include('user.urls')),
+    # path('rest-auth', include('rest_auth.urls')),
 ]

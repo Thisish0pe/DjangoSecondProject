@@ -46,6 +46,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_api_key',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'rest_auth.registration',
     'chatbot',
     'user',
 ]
@@ -88,22 +95,6 @@ WSGI_APPLICATION = 'chat_project.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 
-# REST Framework
-REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework_api_key.permissions.HasAPIKey",
-    ],
-    'DEFAULT_THROTTLE_CLASS': {
-        'rest_framework.throttling.AnonRateThrottle',
-        'rest_framework.throttling.UserRateThrottle'
-    },
-    'DEFAULT_THROTTLE_RATES': {
-        'anon': '5/hour', # sec, min, hour, day
-        'user': '20/hour',
-    }
-}
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -141,7 +132,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 #REST Framework
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework_api_key.permissions.HasAPIKey",
+        'rest_framework.permissions.IsAuthenticated'
     ],
     'DEFAULT_THROTTLE_CLASS': {
         'rest_framework.throttling.AnonRateThrottle',

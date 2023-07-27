@@ -3,14 +3,16 @@ from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.throttling import UserRateThrottle
+from rest_framework.permissions import AllowAny
 from .serializers import UserSerializer
 
 ### Registration
 class Registration(APIView):
-
-    throttle_classes = [UserRateThrottle]
-
+    persmission_classes = [AllowAny]
+    
+    def get(self,request):
+        return Response("?")
+    
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
@@ -22,8 +24,7 @@ class Registration(APIView):
 
 ### Login
 class Login(APIView):
-
-    throttle_classes = [UserRateThrottle]
+    persmission_classes = [AllowAny]
 
     def post(self, request):
         user = authenticate(
