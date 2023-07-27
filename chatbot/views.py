@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -16,15 +17,8 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 
 
 class ChatView(APIView):
-
-    throttle_classes = [UserRateThrottle]
-
-    # def get(self, request, pk, *args, **kwargs):
-    #     # 로그인 후 특정 유저의 챗 봇 대화 가져오기
-    #     conversations = Conversation.objects.get(pk=pk) # user_id
-    #     # JSON 형태로 대화내역 나열 후 전송
-    #     serialized_conversations = CoversationSerializer(conversations, many=True) # 직렬화
-    #     return Response(serialized_conversations.data)
+    permission_classes = [IsAuthenticated] # 인증된 사용자만 접근 가능
+    throttle_classes = [UserRateThrottle] # 사용자 요청 속도 제한 설정
 
     def post(self, request, *args, **kwargs):
         # 유저의 질문 가져오기
