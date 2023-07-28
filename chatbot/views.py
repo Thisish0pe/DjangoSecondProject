@@ -45,7 +45,7 @@ class ChatView(APIView):
             )
             response = completions.choices[0].text.strip()
 
-            conversation = Conversation(questioner=user, prompt=prompt, response=response)
+            conversation = Conversation(questioner=request.user, prompt=prompt, response=response)
             conversation.save()
 
             # 대화 기록에 새로운 응답 추가 더이상 필요하지 않음. 위의 conversation.save() 로 데이터베이스에 대화 기록이 저장되기 때문

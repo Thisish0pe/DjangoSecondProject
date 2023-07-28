@@ -131,12 +131,10 @@ REST_FRAMEWORK = {
         # 'rest_framework.permissions.AllowAny'
     ],
     'DEFAULT_THROTTLE_CLASS': {
-        'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle'
     },
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '5/hour', # sec, min, hour, day
-        'user': '20/hour',
+        'user': '5/day',
     },
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
