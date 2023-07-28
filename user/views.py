@@ -4,21 +4,19 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
+from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer
 
 ### Registration
 class Registration(APIView):
-    persmission_classes = [AllowAny]
-    
-    def get(self,request):
-        return Response("?")
-    
+    permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            return HttpResponse('hallo')
-            # return Response(serializer.data, status=status.HTTP_201_CREATED)
+            token = Token.objects.create(user=user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
@@ -33,8 +31,7 @@ class Login(APIView):
         # 이미 회원가입 되 유저의 경우
         if user is not None:
             serializer = UserSerializer(user)
-            return HttpResponse('hallo')
-            # return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 ### Logout

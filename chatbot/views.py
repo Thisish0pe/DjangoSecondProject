@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.throttling import UserRateThrottle
+from rest_framework.authentication import TokenAuthentication
 from dotenv import load_dotenv
 import openai
 import os
