@@ -125,7 +125,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 #REST Framework
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
+    'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
     ],
     'DEFAULT_THROTTLE_CLASS': {
@@ -135,7 +135,10 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'anon': '5/hour', # sec, min, hour, day
         'user': '20/hour',
-    }
+    },
+    'DEFAURL_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
 }
 
 
