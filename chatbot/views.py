@@ -20,6 +20,7 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 class ChatView(APIView):
     permission_classes = [IsAuthenticated] # 인증된 사용자만 접근 가능
     throttle_classes = [UserRateThrottle] # 사용자 요청 속도 제한 설정
+    MAX_CONVERSATIONS = 15  # 대화 기록 최대 개수 설정
 
     def get(self, request, *args, **kwargs):
         session_conversations = Conversation.objects.filter(questioner=request.user)
