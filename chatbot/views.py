@@ -30,6 +30,8 @@ class ChatView(APIView):
             # 1 시도 : session_conversations = user.conversation.all()
             # 2 시도 : session_conversations = Conversation.objects.get(pk=pk)# user_id
             # 3 시도 :
+            # session_conversations = Conversation.objects.all()
+            # 4 시도 :
             session_conversations = Conversation.objects.filter(questioner=request.user)
             previous_conversations = "\n".join([f"User: {c['prompt']}\nAI: {c['response']}" for c in session_conversations])
             prompt_with_previous = f"{previous_conversations}\nUser: {prompt}\nAI:"
