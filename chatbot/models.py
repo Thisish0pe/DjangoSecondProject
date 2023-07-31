@@ -7,7 +7,7 @@ User = get_user_model()
 
 class Conversation(models.Model):
     questioner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='conversation')
-    prompt = models.CharField(max_length=512)
+    prompt = models.CharField(max_length=312)
     response = models.TextField()
     asked_at = models.DateTimeField(auto_now_add=True)
     
