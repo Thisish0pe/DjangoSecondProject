@@ -19,20 +19,20 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 
 class ChatView(APIView):
     permission_classes = [IsAuthenticated] # 인증된 사용자만 접근 가능
-    throttle_classes = [UserRateThrottle] # 사용자 요청 속도 제한 설정
-    MAX_CONVERSATIONS = 15  # 대화 기록 최대 개수 설정
 
     def get(self, request, *args, **kwargs):
-        session_conversations = Conversation.objects.filter(questioner=request.user)
-        previous_conversations = "\n".join([f"User: {c.prompt}\nAI: {c.response}" for c in session_conversations])
+        session_conversations = Conversation.objects.filter(questioner=request.user).order_by('-asked_at')[:5]
+        previous_conversations = "\n".join([f"Asked at: {c.asked_at.strftime('%Y-%m-%d %H:%M')}\nUser: {c.prompt}\nAI: {c.response}" for c in session_conversations])
         return Response(previous_conversations)
 
     def post(self, request, *args, **kwargs):
+        # 사용자 요청 속도 제한 설정
+        throttle_classes = [UserRateThrottle]
         # 유저의 질문 가져오기
         prompt = request.data.get('prompt')
         if prompt:
             session_conversations = Conversation.objects.filter(questioner=request.user)
-            previous_conversations = "\n".join([f"User: {c.prompt}\nAI: {c.response}" for c in session_conversations])
+            previous_conversations = "\n".join([f"Asked at: {c.asked_at.strftime('%Y-%m-%d %H:%M')}\nUser: {c.prompt}\nAI: {c.response}" for c in session_conversations])
             prompt_with_previous = f"{previous_conversations}\nUser: {prompt}\nAI:"
 
             model_engine = "text-davinci-003"
